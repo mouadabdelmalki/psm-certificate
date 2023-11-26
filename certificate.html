@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>PSM I EXAM</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      #progress-container {
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+      .container {
+        background: url(https://i.gifer.com/PwSB.gif);
+        background-repeat: no-repeat;
+        background-size: cover; /* Make the background image cover the entire container */
+        background-position: center; /* Center the background image */
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        filter: blur(2px);
+        filter: brightness(0.5);
+        margin: 0;
+        padding: 0;
+    }
+
+    .quiz-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    animation: fade-in 0.5s ease-out;
+    filter: blur(0);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+      button {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+      }
+
+      #result-container {
+        margin-top: 20px;
+        font-weight: bold;
+        color: #27ae60;
+        animation: fade-in 0.5s ease-out;
+      }
+
+      #question-container {
+        font-size: 25px;
+        font-weight: 600;
+        padding: 2%;
+        word-spacing: 2px;
+    }
+
+      .option {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: left;
+        opacity: 0;
+        animation: fade-in 0.5s ease-out forwards;
+        font-size: 19px;
+      }
+
+      input[type="checkbox"] {
+        margin-right: 10px;
+      }
+
+      #timer-container {
+        margin-top: 10px;
+        font-size: 18px;
+        color: #e74c3c;
+      }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fade-out {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
+      #feedback-container {
+        margin-top: 20px;
+        color: #e74c3c; /* Red color for feedback */
+      }
+
+      #logo-img{
+        max-width: 100%; /* Make the logo image responsive */
+        height: auto; /* Maintain the image's aspect ratio */
+        width: 150px; /* Set a specific width if needed */
+      }
+
+      .feedback {
+        margin-bottom: 10px;
+      }
+
+      /* Add a media query for smaller screens */
+    @media (max-width: 600px) {
+        .quiz-container {
+            padding: 15px; /* Adjust padding for smaller screens */
+        }
+        #question-container {
+            font-size: 15px; /* Adjust font size for smaller screens */
+            padding: 5%;
+        }
+        .option{
+            font-size: 16px;
+        }
+
+        #logo-img{
+            width: 75px;
+        }
+    }
+    </style>
+    <title>Scrum Quiz</title>
+  </head>
+  <body>
+    <div class="container"></div>
+    <div class="quiz-container">
+      <div>
+        <img
+          id="logo-img"
+          src="https://images.credly.com/images/a2790314-008a-4c3d-9553-f5e84eb359ba/twitter_thumb_201604_image.png"
+          alt=""
+        />
+
+    <div id="timer-container"></div>
+      </div>
+      <div id="feedback-container"></div>
+      <div id="question-container">
+        <!-- Questions will be inserted here dynamically -->
+      </div>
+      <div id="options-container">
+        <!-- Options will be inserted here dynamically -->
+      </div>
+      <button onclick="nextQuestion()">Next</button>
+      <div id="result-container"></div>
+      <div id="progress-container">
+        <div id="progress-bar"></div>
+      </div>
+     
+    </div>
+
+    <script>
+      // Quiz questions and answers
+      const questions = [
+        {
+          question:
+            "In a scenario where you are the Scrum Master for six new Scrum Teams building one product, which two conditions should you strive for?",
+          options: [
+            "There should be six Product Owners, one for each Scrum Team.",
+            "There should be six Product Owners, reporting to a chief Product Owner.",
+            "The product has one Product Backlog.",
+            "Each Scrum Team should have a separate Product Backlog.",
+            "There should be only one Product Owner.",
+          ],
+          correctAnswers: [
+            "The product has one Product Backlog.",
+            "Each Scrum Team should have a separate Product Backlog.",
+          ],
+        },
+        {
+          question:
+            "A Scrum Team has been working on a product for nine Sprints. A new Product Owner comes in, understanding he is accountable for the Product Backlog. However, he is unsure about his responsibilities. Which two activities are part of the Product Owner role according to Scrum? (choose two)",
+          options: [
+            "Ensuring that the most valuable functionality is produced first, at all times.",
+            "Interacting with stakeholders.",
+            "Providing the Development Team with detailed specifications.",
+            "Describing features as Use Cases.",
+            "Creating detailed functional test cases.",
+          ],
+          correctAnswers: [
+            "Ensuring that the most valuable functionality is produced first, at all times.",
+            "Interacting with stakeholders.",
+          ],
+        },
+        {
+          question:
+            "User documentation is part of your definition of 'Done'. However, there aren't enough technical writers for all teams. Your Development Team doesn't have a technical writer. What should you do?",
+          options: [
+            "Form a separate team of technical writers that will work on an on-demand basis for the various Product Owners. Work order will be first in, first out.",
+            "Let the user documentation remain undone and accumulate until after the last development Sprint. It will then be done by any available technical writers.",
+            "Wait until you have a technical writer on your Development Team to take care of this.",
+            "Your Development Team is still responsible for creating user documentation. In this case, the Development Team members will write it.",
+          ],
+          correctAnswers: [
+            "Your Development Team is still responsible for creating user documentation. In this case, the Development Team members will write it.",
+          ],
+        },
+        {
+          question:
+            "You are the Scrum Master for four Scrum Teams working from the same Product Backlog. Several of the developers come to you complaining that work identified for the upcoming two Sprints will require full-time commitment from a technical specialist who is external to the teams. What are two key concerns for the Scrum Master to take into account in this situation? (choose two)",
+          options: [
+            "The desire to maintain a stable velocity.",
+            "The benefit of Development Teams figuring out a solution for themselves.",
+            "The need to have enough work to keep all Development Team members busy.",
+            "The ability of the Development Teams to produce integrated Increments.",
+          ],
+          correctAnswers: [
+            "The benefit of Development Teams figuring out a solution for themselves.",
+            "The ability of the Development Teams to produce integrated Increments.",
+          ],
+        },
+        {
+          question: "The Product Backlog is ordered by:",
+          options: [
+            "The Product Owner with the most valuable items placed at the top.",
+            "Risk, where safer items are at the top, and riskier items are at the bottom.",
+            "Items are randomly arranged.",
+            "Size, where small items are at the top and large items are at the bottom.",
+          ],
+          correctAnswers: [
+            "The Product Owner with the most valuable items placed at the top.",
+          ],
+        },
+        {
+          question:
+            "What happens if the Development Team cannot complete its work by the end of the Sprint?",
+          options: [
+            "The Sprint is extended and future Sprints use this new duration.",
+            "The Sprint length holds, and the Development Team continuously learns what is actually possible to do within a Sprint of this length.",
+            "The Sprint is extended temporarily. Lessons are taken to ensure it doesn't happen again.",
+          ],
+          correctAnswers: [
+            "The Sprint length holds, and the Development Team continuously learns what is actually possible to do within a Sprint of this length.",
+          ],
+        },
+      ];
+
+      let currentQuestion = 0;
+      let userAnswers = [];
+      let timer;
+
+      // Display the current question and options
+      function displayQuestion() {
+        const questionContainer = document.getElementById("question-container");
+        const optionsContainer = document.getElementById("options-container");
+        const resultContainer = document.getElementById("result-container");
+        const timerContainer = document.getElementById("timer-container");
+        const progressContainer = document.getElementById("progress-container");
+
+        // Calculate progress
+        const progress = Math.round((currentQuestion / questions.length) * 100);
+
+        // Display progress
+        progressContainer.innerHTML = `Progress: ${progress}%`;
+
+        // Check if it's the last question
+        if (currentQuestion === questions.length - 1) {
+          resultContainer.innerHTML = ""; // Clear previous results
+        }
+
+        questionContainer.innerHTML = questions[currentQuestion].question;
+
+        optionsContainer.innerHTML = "";
+        for (let i = 0; i < questions[currentQuestion].options.length; i++) {
+          const option = document.createElement("div");
+          option.classList.add("option");
+          option.innerHTML = `<input type="checkbox" id="option${i}" value="${questions[currentQuestion].options[i]}">
+                            <label for="option${i}">${questions[currentQuestion].options[i]}</label>`;
+          optionsContainer.appendChild(option);
+        }
+
+        // Reset timer
+        clearInterval(timer);
+        startTimer(timerContainer);
+      }
+
+      // Move to the next question
+      function nextQuestion() {
+        const selectedOptions = document.querySelectorAll("input:checked");
+        const userSelection = Array.from(selectedOptions).map(
+          (option) => option.value
+        );
+
+        userAnswers.push(userSelection);
+
+        currentQuestion++;
+
+        // Display the next question or end the quiz
+        if (currentQuestion < questions.length) {
+          displayQuestion();
+        } else {
+          displayResults();
+        }
+      }
+
+      // Display quiz results
+      function displayResults() {
+        const resultContainer = document.getElementById("result-container");
+        const feedbackContainer = document.getElementById("feedback-container");
+        const timerContainer = document.getElementById("timer-container");
+
+        // Stop and hide the timer
+        clearInterval(timer);
+        timerContainer.style.display = "none";
+
+        let score = 0;
+        for (let i = 0; i < questions.length; i++) {
+          const correctAnswers = questions[i].correctAnswers;
+          const userSelection = userAnswers[i];
+
+          if (arraysEqual(correctAnswers, userSelection)) {
+            score++;
+          } else {
+            // Display feedback for incorrect answers
+            const feedback = document.createElement("div");
+            feedback.classList.add("feedback");
+            feedback.innerHTML = `Question ${
+              i + 1
+            }: Incorrect. Correct Answer(s): ${correctAnswers.join(", ")}`;
+            feedbackContainer.appendChild(feedback);
+          }
+        }
+
+        resultContainer.innerHTML = `Your score: ${score} out of ${questions.length}`;
+      }
+
+      // Utility function to check if two arrays are equal
+      function arraysEqual(arr1, arr2) {
+        return JSON.stringify(arr1) === JSON.stringify(arr2);
+      }
+
+      // Start the timer
+      function startTimer(timerContainer) {
+        let seconds = 40;
+        timerContainer.innerHTML = `Time remaining: ${seconds} seconds`;
+
+        timer = setInterval(() => {
+          seconds--;
+
+          if (seconds <= 0) {
+            clearInterval(timer);
+            nextQuestion();
+          } else {
+            timerContainer.innerHTML = `Time remaining: ${seconds} seconds`;
+          }
+        }, 1000);
+      }
+
+      // Initial display
+      displayQuestion();
+    </script>
+  </body>
+</html>
